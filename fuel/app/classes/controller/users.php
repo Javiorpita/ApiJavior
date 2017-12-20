@@ -1,6 +1,7 @@
 <?php 
 class Controller_Users extends Controller_Rest
 {
+    private $key = "j9ijg90w34498u98jiufjvdi9vuu9jvr9idjr9jci";
 
     public function post_create()
     {
@@ -69,16 +70,106 @@ class Controller_Users extends Controller_Rest
 
         return $json;
     }
+    public function post_changePassword()
+    {
+        $input = $_POST;
+        $user = new Model_Users();
+        $user = Model_Users::find($_POST['id']);
+        
+        
+
+        $user->password = $input['password'];
+
+        $user->save();
+
+        $json = $this->response(array(
+            'code' => 200,
+            'message' => 'contraseña modificada',
+            'data' => ['password' => $input['password']]
+        ));
+
+        return $json;
+    }
     public function get_login()
     {
-        $users = Model_Users::find('all', array('where' => array(array('name',$input['name']),array('password',$input['password']) )));
-        if ($input['name'] == 'name' && $input['password'] == 'password')
+        try{
+            $input = $_GET;
+        
+            $users = Model_Users::find('all', array('where' => array(array('name',$input['name']),array('password',$input['password']) )));
+         
+            if (! empty ($user))
+            {   
+
+                foreach ($user as $key => $value)
+                {
+                    $id = $user[$key]->id;
+                    $name = $user[$key]->name;
+                    $password = $user[$key]->password;
+
+                }
+            }
+                else
+                {
+                    return $this->response(array('401','Error de autentificacion'));
+                }
+
+                if ($name == $input['name'] && $password == $input['password'])
+                {
+                    $dataToken = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "password" => $password
+                    );
+                $token = JWT::encode($dataToken, $this->key);
+
+                return $this->response(array('220','login correcto',['token' => $token, 'username' => $name]));
+
+                }
+                else
+                {
+                return $this->response(array('401','Error de autentificación'));
+                }
+
+        }
+
+        catch (Exception $e)
         {
-         $json = $this->response(array(
-            'pass' => 'Te has logueado'
-        ));
+        return $this->response(array('500',$e->getMessage()));
         }
 
 
     }
+
+    public function post_createLists($value){
+        try {
+           
+
+            $input = $_POST;
+            
+            $list = new Model_Lists();
+            $list->nameList = $input['nameList'];
+            $list->save();
+
+            $json = $this->response(array(
+                'code' => 200,
+                'message' => 'Lista creada',
+                'data' => ['listname' => $input['nameList']]
+            ));
+
+            return $json;
+
+        } 
+        catch (Exception $e) 
+        {
+            $json = $this->response(array(
+                'code' => 500,
+                'message' => $e->getMessage(),
+            ));
+
+            return $json;
+        }
+
+    }
+
+    
 }

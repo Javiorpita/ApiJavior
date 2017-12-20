@@ -8,7 +8,7 @@ class users
     function up()
     {
         \DBUtil::create_table('users', array(
-            'id' => array('type' => 'int', 'constraint' => 5,'auto_incremental' => true),
+            'id' => array('type' => 'int', 'constraint' => 5,'auto_increment' => true),
             'name' => array('type' => 'varchar', 'constraint' => 100),
             'password' => array('type' => 'varchar', 'constraint' => 100),
 
