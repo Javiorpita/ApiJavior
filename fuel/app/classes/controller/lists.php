@@ -43,4 +43,38 @@ class Controller_Lists extends Controller_Rest
         
 
     }
+    public function post_changeList()
+    {
+        $input = $_POST;
+        $list = new Model_Lists();
+        $list = Model_Lists::find($_POST['id']);
+        
+        
+
+        $list->nameList = $input['nameList'];
+
+        $list->save();
+
+        $json = $this->response(array(
+            'code' => 200,
+            'message' => 'Lista modificada',
+            'data' => ['nameList' => $input['nameList']]
+        ));
+
+        return $json;
+    }
+     public function post_delete()
+    {
+        $list = Model_Lists::find($_POST['id']);
+        $listname = $list->nameList;
+        $list->delete();
+
+        $json = $this->response(array(
+            'code' => 200,
+            'message' => 'lista borrada',
+            'name' => $listname
+        ));
+
+        return $json;
+    }
 }

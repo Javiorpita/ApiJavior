@@ -39,11 +39,45 @@ class Controller_Songs extends Controller_Rest
     public function get_songs()
     {
 
-        $songs = Model_Users::find('all');
+        $songs = Model_Songs::find('all');
 
         return $this->response(Arr::reindex($songs));
 
         
 
+    }
+    public function post_changeSong()
+    {
+        $input = $_POST;
+        $song = new Model_Songs();
+        $song = Model_Songs::find($_POST['id']);
+        
+        
+
+        $song->nameSongs = $input['nameSongs'];
+
+        $song->save();
+
+        $json = $this->response(array(
+            'code' => 200,
+            'message' => 'Canción modificada',
+            'data' => ['nameSongs' => $input['nameSongs']]
+        ));
+
+        return $json;
+    }
+     public function post_delete()
+    {
+        $list = Model_Songs::find($_POST['id']);
+        $songname = $list->nameSongs;
+        $list->delete();
+
+        $json = $this->response(array(
+            'code' => 200,
+            'message' => 'Canción borrada',
+            'name' => $songname
+        ));
+
+        return $json;
     }
 }

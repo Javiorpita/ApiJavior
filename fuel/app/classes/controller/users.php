@@ -140,36 +140,7 @@ class Controller_Users extends Controller_Rest
 
     }
 
-    public function post_createLists($value){
-        try {
-           
-
-            $input = $_POST;
-            
-            $list = new Model_Lists();
-            $list->nameList = $input['nameList'];
-            $list->save();
-
-            $json = $this->response(array(
-                'code' => 200,
-                'message' => 'Lista creada',
-                'data' => ['listname' => $input['nameList']]
-            ));
-
-            return $json;
-
-        } 
-        catch (Exception $e) 
-        {
-            $json = $this->response(array(
-                'code' => 500,
-                'message' => $e->getMessage(),
-            ));
-
-            return $json;
-        }
-
-    }
+    
 
     
 }
